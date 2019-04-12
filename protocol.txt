@@ -1,0 +1,38 @@
+
+             USC_TOF   USC_TOF               USC_TOF   USC_TOF
+              UART      UART                  UART      UART
+               ||        ||                    ||        ||
+               ||        ||                    ||        ||
+               ||        ||                    ||        ||
+               \/        \/                    \/        \/
+        +------  --------  ------+      +------  --------  ------+
+        |      UART --> CAN      |      |      UART --> CAN      |
+   (H)  |     EXCHANGE BOARD     |      |     EXCHANGE BOARD     |
+C --------                      ----------                      --------
+A           <---------------->              <---------------->           ... ...
+N --------                      ----------                      --------
+   (L)  |                        |      |                        |
+        +------------------------+      +------------------------+
+
+CAN PROTOCOL:
+baudrate: 500Kbps
+maximum number of time quanta: 1 time quantum
+bit segment 1: 2 time quantum
+bit segment 2: 3 time quantum
+standard identifier = 0x05A0 + BoardID (0, 1, 2, ...)
+extended identifier = 0x0000
+message frame type: Data frame
+identifier type: Standard Id
+frame length = 8
+frame data:
+Note: Use Little Endian
+union {
+    float distance_in_cm;
+    uint8_t data[4];
+} distance_union;
+
+struct {
+    distance_union right_distance;
+    distance_union left_distance;
+} data_in_frame;
+
